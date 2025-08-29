@@ -32,23 +32,42 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'rest_framework',
+
     'catalog',
+
     'accounts',
+
     'django.contrib.admin',
+    
+    # Authentication framework and its default models.
+    # - Four default permissions are created for each model (add, change, delete, view)
     'django.contrib.auth',
+    
+    # Allows permissions to be associated with models.
     'django.contrib.contenttypes',
+
     'django.contrib.sessions',
+
     'django.contrib.messages',
+
     'django.contrib.staticfiles',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    
+    # Manages sessions across requests.
     'django.contrib.sessions.middleware.SessionMiddleware',
+
     'django.middleware.common.CommonMiddleware',
+
     'django.middleware.csrf.CsrfViewMiddleware',
+    
+    # Associates users with requests using sessions.
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+
     'django.contrib.messages.middleware.MessageMiddleware',
+
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
