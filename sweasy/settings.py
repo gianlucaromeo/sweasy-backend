@@ -79,9 +79,19 @@ TEMPLATES = [
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
+            # A list of callables that take a request object as their argument 
+            # and return a dictionary of items to be merged into the context.
+            # Note: Each context processor is applied in order.
             'context_processors': [
+                # This allows RequestContext to contain "request".
+                # Note: This is required by 'allauth'.
                 'django.template.context_processors.request',
+                
+                # This allows RequestContext to contain "user", "perms".
                 'django.contrib.auth.context_processors.auth',
+                
+                # This allows RequestContext to contain "messages" and 
+                # "DEFAULT_MESSAGE_LEVELS".
                 'django.contrib.messages.context_processors.messages',
             ],
         },
