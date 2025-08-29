@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     
     # Authentication framework and its default models.
     # - Four default permissions are created for each model (add, change, delete, view)
+    # Note: This is required for 'allauth'.
     'django.contrib.auth',
     
     # Allows permissions to be associated with models.
@@ -48,9 +49,13 @@ INSTALLED_APPS = [
 
     'django.contrib.sessions',
 
+    # Note: This is required for 'allauth'.
     'django.contrib.messages',
 
     'django.contrib.staticfiles',
+    
+    'allauth',
+    'allauth.account',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +74,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
 
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'sweasy.urls'
@@ -110,6 +117,14 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 
 # Password validation
