@@ -36,7 +36,11 @@ INSTALLED_APPS = [
     'django_extensions',
 
     'rest_framework',
+    'rest_framework.authtoken',
 
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    
     'catalog',
 
     'accounts',
@@ -62,18 +66,30 @@ INSTALLED_APPS = [
     
     'allauth',
     'allauth.account',
-    'allauth.headless'
+    'allauth.socialaccount',
 ]
 
 SITE_ID = 1
 DEFAULT_FROM_EMAIL = 'no-reply@sweasy.com'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*', 'username']
 ACCOUNT_LOGIN_METHODS = ['email']
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 # Optional helpers during dev:
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
+REST_AUTH = {
+    'USE_JWT': True,
+    'JWT_AUTH_COOKIE': 'my-app-auth',
+    'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+    ),
+}
 
 # In case you need to point these to your own frontend application, you can do 
 # so by configuring this setting.
