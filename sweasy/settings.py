@@ -43,6 +43,8 @@ INSTALLED_APPS = [
 
     'django.contrib.admin',
     
+    'django.contrib.sites',
+    
     # Authentication framework and its default models.
     # - Four default permissions are created for each model (add, change, delete, view)
     # Note: This is required for 'allauth'.
@@ -63,22 +65,30 @@ INSTALLED_APPS = [
     'allauth.headless'
 ]
 
+SITE_ID = 1
+DEFAULT_FROM_EMAIL = 'no-reply@sweasy.com'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_LOGIN_METHODS = ['email']
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+# Optional helpers during dev:
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
 # In case you need to point these to your own frontend application, you can do 
 # so by configuring this setting.
 # HEADLESS_FRONTEND_URLS = {
-    # "account_confirm_email": "https://app.project.org/account/verify-email/{key}",
-    # "account_reset_password": "https://app.project.org/account/password/reset",
-    # "account_reset_password_from_key": "https://app.org/account/password/reset/key/{key}",
-    # "account_signup": "https://app.org/account/signup",
-    # "socialaccount_login_error": "https://app.project.org/account/provider/callback",
-    # ...
+    # "account_confirm_email": "http://127.0.0.1:8000/_allauth/app/v1/auth/email/verify/{key}/",
+    # "account_reset_password": "http://127.0.0.1:8000/accounts/password/reset/",
+    # "account_reset_password_from_key": "http://127.0.0.1:8000/accounts/password/reset/confirm/{key}/",
+    # "account_signup": "http://127.0.0.1:8000/accounts/signup/",
 # }
 
 # Use True if your application fully takes care of the frontend, and you don't
 # want for e.g. the login and signup views to be accessible.
 # In this case, including allauth.urls skips those views, yet, still includes
 # e.g. the provider callback views.
-HEADLESS_ONLY = True
+HEADLESS_ONLY = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
