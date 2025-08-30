@@ -18,7 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('api/v1/accounts/', include('allauth.urls')),
+    # Even when using allauth headless, the third-party provider endpoints are 
+    # still needed for handling e.g. the OAuth handshake. The account views
+    # can be disabled using `HEADLESS_ONLY = True`.
+    path('accounts/', include('allauth.urls')),
+    
+    # API endpoints for allauth headless.
+    path("_allauth/", include("allauth.headless.urls")),
+
     path('api/v1/admin/', admin.site.urls),
     path('api/v1/auth/', include('rest_framework.urls')),
     path('api/v1/catalog/', include('catalog.urls')),

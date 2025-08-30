@@ -31,6 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Collection of custom extensions for the Django Framework (management 
+    # commands, additional database fields, admin extensions and much more).
+    'django_extensions',
+
     'rest_framework',
 
     'catalog',
@@ -56,7 +60,25 @@ INSTALLED_APPS = [
     
     'allauth',
     'allauth.account',
+    'allauth.headless'
 ]
+
+# In case you need to point these to your own frontend application, you can do 
+# so by configuring this setting.
+# HEADLESS_FRONTEND_URLS = {
+    # "account_confirm_email": "https://app.project.org/account/verify-email/{key}",
+    # "account_reset_password": "https://app.project.org/account/password/reset",
+    # "account_reset_password_from_key": "https://app.org/account/password/reset/key/{key}",
+    # "account_signup": "https://app.org/account/signup",
+    # "socialaccount_login_error": "https://app.project.org/account/provider/callback",
+    # ...
+# }
+
+# Use True if your application fully takes care of the frontend, and you don't
+# want for e.g. the login and signup views to be accessible.
+# In this case, including allauth.urls skips those views, yet, still includes
+# e.g. the provider callback views.
+HEADLESS_ONLY = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
