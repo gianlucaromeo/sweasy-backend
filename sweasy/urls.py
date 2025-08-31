@@ -27,11 +27,10 @@ urlpatterns = [
     # API endpoints for allauth headless.
     #path("_allauth/", include("allauth.headless.urls")),
     
-    path('dj-rest-auth/', include('dj_rest_auth.urls')),
-    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
-    path('dj-rest-auth/account-confirm-email/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
+    path('api/v1/auth/', include('dj_rest_auth.urls')),
+    path('api/v1/auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('api/v1/auth/account-confirm-email/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
 
     path('api/v1/admin/', admin.site.urls),
-    path('api/v1/auth/', include('rest_framework.urls')),
     path('api/v1/catalog/', include('catalog.urls')),
 ]
