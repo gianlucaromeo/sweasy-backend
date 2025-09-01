@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from dj_rest_auth.registration.views import VerifyEmailView
+from dj_rest_auth.registration.views import (
+    RegisterView, VerifyEmailView, ResendEmailVerificationView
+)
 
 urlpatterns = [
     # Even when using allauth headless, the third-party provider endpoints are 
@@ -28,8 +30,9 @@ urlpatterns = [
     #path("_allauth/", include("allauth.headless.urls")),
     
     path('api/v1/auth/', include('dj_rest_auth.urls')),
-    path('api/v1/auth/registration/', include('dj_rest_auth.registration.urls')),
-    path('api/v1/auth/account-confirm-email/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
+    path('api/v1/auth/registration/', RegisterView.as_view(), name='rest_register'),
+    path('api/v1/auth/registration/verify-email/', VerifyEmailView.as_view(), name='rest_verify_email'),
+    path('api/v1/auth/registration/resend-email/', ResendEmailVerificationView.as_view(), name='rest_resend_email'),
 
     path('api/v1/admin/', admin.site.urls),
     path('api/v1/catalog/', include('catalog.urls')),

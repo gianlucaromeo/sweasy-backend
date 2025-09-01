@@ -36,10 +36,25 @@ INSTALLED_APPS = [
     'django_extensions',
 
     'rest_framework',
-    'rest_framework.authtoken',
 
+    # 'rest_framework.authtoken',
+    
+    # Basic auth functionality like login, logout, password reset and password change.
+    # Wraps allatuh and django auth.
     'dj_rest_auth',
+    
+    'django.contrib.sites',
+    
+    # allauth and allauth.account in this project are needed as a backend 
+    # engine for dj_rest_auth.registration.
+    'allauth',
+    'allauth.account',
+    
+    # Logic related with registration and social media authentication.
+    # Uses allauth under the hood.
     'dj_rest_auth.registration',
+    
+    'allauth.socialaccount',   
     
     'catalog',
 
@@ -47,7 +62,6 @@ INSTALLED_APPS = [
 
     'django.contrib.admin',
     
-    'django.contrib.sites',
     
     # Authentication framework and its default models.
     # - Four default permissions are created for each model (add, change, delete, view)
@@ -63,26 +77,25 @@ INSTALLED_APPS = [
     'django.contrib.messages',
 
     'django.contrib.staticfiles',
-    
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
 ]
 
 SITE_ID = 1
 DEFAULT_FROM_EMAIL = 'no-reply@sweasy.com'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*', 'username']
-ACCOUNT_LOGIN_METHODS = ['email']
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
 # Optional helpers during dev:
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
 
 REST_AUTH = {
     'USE_JWT': True,
     'JWT_AUTH_COOKIE': 'my-app-auth',
     'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
+    'TOKEN_MODEL': None,  # Leave None if not importing rest_framework.authtoken
 }
 
 REST_FRAMEWORK = {
@@ -104,7 +117,7 @@ REST_FRAMEWORK = {
 # want for e.g. the login and signup views to be accessible.
 # In this case, including allauth.urls skips those views, yet, still includes
 # e.g. the provider callback views.
-HEADLESS_ONLY = False
+HEADLESS_ONLY = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
