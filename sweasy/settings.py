@@ -83,8 +83,8 @@ SITE_ID = 1
 DEFAULT_FROM_EMAIL = 'no-reply@sweasy.com'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
-ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*', 'username*']
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 # Optional helpers during dev:
@@ -93,8 +93,8 @@ ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 REST_AUTH = {
     'USE_JWT': True,
-    'JWT_AUTH_COOKIE': 'my-app-auth',
-    'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
+    'JWT_AUTH_COOKIE': 'sweasy-jwt',
+    'JWT_AUTH_REFRESH_COOKIE': 'sweasy-refresh-jwt',
     'TOKEN_MODEL': None,  # Leave None if not importing rest_framework.authtoken
 }
 
