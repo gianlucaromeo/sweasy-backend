@@ -18,8 +18,9 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.shortcuts import redirect
 from dj_rest_auth.registration.views import (
-    RegisterView, VerifyEmailView, ResendEmailVerificationView
+    VerifyEmailView, ResendEmailVerificationView
 )
+from accounts.views import CustomRegisterView
 
 urlpatterns = [
     # Even when using allauth headless, the third-party provider endpoints are 
@@ -32,7 +33,7 @@ urlpatterns = [
     
     path('api/v1/auth/', include('dj_rest_auth.urls')),
     path('api/v1/auth/account-confirm-email/', VerifyEmailView.as_view(), name='account_email_verification_sent'),
-    path('api/v1/auth/registration/', RegisterView.as_view(), name='rest_register'),
+    path('api/v1/auth/registration/', CustomRegisterView.as_view(), name='rest_register'),
     path('api/v1/auth/registration/verify-email/', VerifyEmailView.as_view(), name='rest_verify_email'),
     path('api/v1/auth/registration/resend-email/', ResendEmailVerificationView.as_view(), name='rest_resend_email'),
 

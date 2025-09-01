@@ -83,6 +83,7 @@ SITE_ID = 1
 DEFAULT_FROM_EMAIL = 'no-reply@sweasy.com'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*', 'username*']
 ACCOUNT_LOGIN_METHODS = {'email', 'username'}
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
@@ -96,6 +97,7 @@ REST_AUTH = {
     'JWT_AUTH_COOKIE': 'sweasy-jwt',
     'JWT_AUTH_REFRESH_COOKIE': 'sweasy-refresh-jwt',
     'TOKEN_MODEL': None,  # Leave None if not importing rest_framework.authtoken
+    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
 }
 
 REST_FRAMEWORK = {
