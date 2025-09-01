@@ -98,6 +98,7 @@ REST_AUTH = {
     'JWT_AUTH_REFRESH_COOKIE': 'sweasy-refresh-jwt',
     'TOKEN_MODEL': None,  # Leave None if not importing rest_framework.authtoken
     'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+    # 'LOGIN_SERIALIZER': 'accounts.serializers.CustomLoginSerializer',
 }
 
 REST_FRAMEWORK = {
