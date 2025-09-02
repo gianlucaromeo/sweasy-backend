@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -17,22 +17,25 @@ def api_root(request, format=None):
 class CategoryList(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 class BookList(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-
+    permission_classes = [permissions.IsAuthenticated]
 class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-
+    permission_classes = [permissions.IsAuthenticated]
 class ChapterList(generics.ListCreateAPIView):
     queryset = Chapter.objects.all()
-    
+    permission_classes = [permissions.IsAuthenticated]
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return ChapterWriteSerializer
@@ -41,3 +44,4 @@ class ChapterList(generics.ListCreateAPIView):
 class ChapterDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Chapter.objects.all()
     serializer_class = ChapterWriteSerializer
+    permission_classes = [permissions.IsAuthenticated]
