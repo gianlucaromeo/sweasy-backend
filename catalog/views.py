@@ -33,10 +33,12 @@ class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]
+
 class BookDetail(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]
+
 class ChapterList(generics.ListAPIView):
     queryset = Chapter.objects.all()
     permission_classes = [permissions.IsAuthenticated]
