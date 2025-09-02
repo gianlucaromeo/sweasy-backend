@@ -11,7 +11,11 @@ class Category(models.Model):
 
 
 class Book(models.Model):
-    category = models.ForeignKey(Category, related_name='books', on_delete=models.CASCADE)
+    category = models.ForeignKey(
+        Category,
+        related_name='books',
+        on_delete=models.CASCADE
+    )
     number = models.PositiveSmallIntegerField(default=0)
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -23,7 +27,11 @@ class Book(models.Model):
 
 
 class Chapter(models.Model):
-    book = models.ForeignKey(Book, related_name='chapters', on_delete=models.CASCADE)
+    book = models.ForeignKey(
+        Book,
+        related_name='chapters',
+        on_delete=models.CASCADE
+    )
     number = models.PositiveSmallIntegerField()
     title = models.CharField(max_length=255)
     description = models.TextField()
