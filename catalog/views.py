@@ -19,25 +19,25 @@ def api_root(request, format=None):
         'chapters': reverse('chapter-list', request=request, format=format),
     })
     
-class CategoryList(generics.ListCreateAPIView):
+class CategoryList(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticated]
 
-class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+class CategoryDetail(generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticated]
 
-class BookList(generics.ListCreateAPIView):
+class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]
-class BookDetail(generics.RetrieveUpdateDestroyAPIView):
+class BookDetail(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]
-class ChapterList(generics.ListCreateAPIView):
+class ChapterList(generics.ListAPIView):
     queryset = Chapter.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
@@ -46,7 +46,7 @@ class ChapterList(generics.ListCreateAPIView):
             return ChapterWriteSerializer
         return ChapterReadSerializer
 
-class ChapterDetail(generics.RetrieveUpdateDestroyAPIView):
+class ChapterDetail(generics.RetrieveAPIView):
     queryset = Chapter.objects.all()
     serializer_class = ChapterWriteSerializer
     permission_classes = [permissions.IsAuthenticated]
