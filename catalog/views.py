@@ -3,7 +3,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from catalog.models import Chapter, Book, Category
-from catalog.serializers import ChapterReadSerializer, ChapterWriteSerializer, BookSerializer, CategorySerializer
+from catalog.serializers import (
+    ChapterReadSerializer,
+    ChapterWriteSerializer,
+    BookSerializer,
+    CategorySerializer
+)
 
 
 @api_view(['GET'])
