@@ -75,7 +75,6 @@ class RegistrationTests(APITestCase):
         self.assertNotIn("username", res.data)
         self.assertEqual(User.objects.count(), 1)
 
-
 @override_settings(ACCOUNT_EMAIL_VERIFICATION="mandatory")
 class LoginTests(APITestCase):
     REGISTER_URL = reverse("rest_register")

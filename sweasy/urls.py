@@ -37,6 +37,7 @@ urlpatterns = [
         confirm_email_redirect,
         name="account_confirm_email"
     ),
+    path('api/v1/accounts/', include('accounts.urls')),
     path('api/v1/admin/', admin.site.urls),
     path('api/v1/catalog/', include('catalog.urls')),
 ]

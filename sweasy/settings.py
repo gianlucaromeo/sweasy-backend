@@ -108,6 +108,8 @@ REST_FRAMEWORK = {
 HEADLESS_ONLY = True
 
 MIDDLEWARE = [
+    'request_logging.middleware.LoggingMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     
     # Manages sessions across requests.
