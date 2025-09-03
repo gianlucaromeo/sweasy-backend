@@ -152,7 +152,7 @@ TEMPLATES = [
                 
                 # This allows RequestContext to contain "messages" and 
                 # "DEFAULT_MESSAGE_LEVELS".
-                'django.contrib.messages.context_processors.messages',
+                # 'django.contrib.messages.context_processors.messages',
             ],
         },
     },
