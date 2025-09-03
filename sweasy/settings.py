@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
     'accounts',
 
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     
     
     # Authentication framework and its default models.
@@ -72,6 +72,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*', 'username*']
 ACCOUNT_LOGIN_METHODS = {'email', 'username'}
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+EMAIL_REQUIRED = True
 
 # Optional helpers during dev:
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
@@ -82,8 +83,9 @@ REST_AUTH = {
     'JWT_AUTH_COOKIE': 'sweasy-jwt',
     'JWT_AUTH_REFRESH_COOKIE': 'sweasy-refresh-jwt',
     'TOKEN_MODEL': None,  # Leave None if not importing rest_framework.authtoken
-    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+    # 'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
     # 'LOGIN_SERIALIZER': 'accounts.serializers.CustomLoginSerializer',
+    'SESSION_LOGIN': False,
 }
 
 REST_FRAMEWORK = {
@@ -171,7 +173,7 @@ DATABASES = {
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
+    # 'django.contrib.auth.backends.ModelBackend',
 
     # `allauth` specific authentication methods, such as login by email
     'allauth.account.auth_backends.AuthenticationBackend',

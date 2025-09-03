@@ -6,6 +6,7 @@ from rest_framework.test import APITestCase
 from allauth.account.models import EmailAddress
 from accounts.models import User
 from catalog.models import Book, Category, Chapter
+from accounts.constants import *
 
 
 @override_settings(ACCOUNT_EMAIL_VERIFICATION="mandatory")
@@ -47,33 +48,39 @@ class RegistrationTests(APITestCase):
         self.assertEqual(user.email, self.email)
         self.assertTrue(user.check_password(self.password))
         self.assertIn("detail", res.data)
+        self.assertEqual(res.data["detail"], GENERIC_REGISTRATION_MSG)
 
     def test_register__missing_required_fields(self):
-        required_fields = ["username", "email", "password1", "password2"]
+        required_fields = [
+            {'field': "username", 'code': CODE_USERNAME_REQUIRED},
+            {'field': "email", 'code': CODE_EMAIL_REQUIRED},
+            {'field': "password1", 'code': CODE_PASSWORD1_REQUIRED},
+            {'field': "password2", 'code': CODE_PASSWORD2_REQUIRED}
+        ]
         for field in required_fields:
-            with self.subTest(missing=field):
+            with self.subTest(missing=field['field']):
                 data = dict(self.payload)
-                data.pop(field)
+                data.pop(field['field'])
                 res = self.register(data)
                 self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-                self.assertIn(field, res.data)
+                self.assertEqual(field['code'], res.data['code'])
                 self.assertEqual(User.objects.count(), 0)
 
     def test_register__username_must_be_unique(self):
         self.assertEqual(self.register().status_code, status.HTTP_201_CREATED)
-        res = self.register()  # same payload again
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("username", res.data)
+        self.assertEqual(User.objects.count(), 1)
+        data = dict(self.payload, email="another-john@doe.com")
+        res = self.register(data)  # same payload again
         self.assertEqual(User.objects.count(), 1)  # unchanged
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
     def test_register__email_must_be_unique(self):
         self.assertEqual(self.register().status_code, status.HTTP_201_CREATED)
+        self.assertEqual(User.objects.count(), 1)
         data = dict(self.payload, username="another-user")
         res = self.register(data)
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("email", res.data)
-        self.assertNotIn("username", res.data)
         self.assertEqual(User.objects.count(), 1)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
 @override_settings(ACCOUNT_EMAIL_VERIFICATION="mandatory")
 class LoginTests(APITestCase):
