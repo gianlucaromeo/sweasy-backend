@@ -1,106 +1,92 @@
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(dotenv_path=os.path.join(BASE_DIR, ".env"))
 
+# SECURITY WARNING: keep the secret key used in production secret.
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b)0is6@0n4v)eiyd6)rwjfw36)=emj3%l(u6)o^**_dzp2v*n('
+# SECURITY WARNING: don't run with debug turned on in production.
+DEBUG = os.getenv("DEBUG")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+# A list of strings representing the host/domain names that this Django site
+# can serve.
+# When DEBUG is True and ALLOWED_HOSTS is empty, the host is validated against
+# ['.localhost', '127.0.0.1', '[::1]'].
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    # Collection of custom extensions for the Django Framework (management 
+    # Collection of custom extensions for the Django Framework (management
     # commands, additional database fields, admin extensions and much more).
-    'django_extensions',
-
-    'rest_framework',
-
+    "django_extensions",
+    "rest_framework",
     # 'rest_framework.authtoken',
-    
     # Basic auth functionality like login, logout, password reset and password change.
     # Wraps allatuh and django auth.
-    'dj_rest_auth',
-    
-    'django.contrib.sites',
-    
-    # allauth and allauth.account in this project are needed as a backend 
+    "dj_rest_auth",
+    "django.contrib.sites",
+    # allauth and allauth.account in this project are needed as a backend
     # engine for dj_rest_auth.registration.
-    'allauth',
-    'allauth.account',
-    
+    "allauth",
+    "allauth.account",
     # Logic related with registration and social media authentication.
     # Uses allauth under the hood.
-    'dj_rest_auth.registration',
-    
-    'allauth.socialaccount',   
-    
-    'catalog',
-
-    'accounts',
-
+    "dj_rest_auth.registration",
+    "allauth.socialaccount",
+    "catalog",
+    "accounts",
     # 'django.contrib.admin',
-    
-    
     # Authentication framework and its default models.
     # - Four default permissions are created for each model (add, change, delete, view)
     # Note: This is required for 'allauth'.
-    'django.contrib.auth',
-    
+    "django.contrib.auth",
     # Allows permissions to be associated with models.
-    'django.contrib.contenttypes',
-
-    'django.contrib.sessions',
-
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
     # Note: This is required for 'allauth'.
-    'django.contrib.messages',
-
-    'django.contrib.staticfiles',
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 ]
 
 SITE_ID = 1
-DEFAULT_FROM_EMAIL = 'no-reply@sweasy.com'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*', 'username*']
-ACCOUNT_LOGIN_METHODS = {'email', 'username'}
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*", "username*"]
+ACCOUNT_LOGIN_METHODS = {"email", "username"}
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 EMAIL_REQUIRED = True
-
-# Optional helpers during dev:
-ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 
 REST_AUTH = {
-    'USE_JWT': True,
-    'JWT_AUTH_COOKIE': 'sweasy-jwt',
-    'JWT_AUTH_REFRESH_COOKIE': 'sweasy-refresh-jwt',
-    'TOKEN_MODEL': None,  # Leave None if not importing rest_framework.authtoken
+    "USE_JWT": True,
+    "JWT_AUTH_COOKIE": "sweasy-jwt",
+    "JWT_AUTH_REFRESH_COOKIE": "sweasy-refresh-jwt",
+    "TOKEN_MODEL": None,  # Leave None if not importing rest_framework.authtoken
+    "SESSION_LOGIN": False,
     # 'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
-    # 'LOGIN_SERIALIZER': 'accounts.serializers.CustomLoginSerializer',
-    'SESSION_LOGIN': False,
+    # 'LOGIN_SERIALIZER': 'accounts.serializers.CustomLoginSerializer',
 }
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
     ),
 }
 
-# In case you need to point these to your own frontend application, you can do 
+# In case you need to point these to your own frontend application, you can do
 # so by configuring this setting.
 # HEADLESS_FRONTEND_URLS = {
-    # "account_confirm_email": "http://127.0.0.1:8000/_allauth/app/v1/auth/email/verify/{key}/",
-    # "account_reset_password": "http://127.0.0.1:8000/accounts/password/reset/",
-    # "account_reset_password_from_key": "http://127.0.0.1:8000/accounts/password/reset/confirm/{key}/",
-    # "account_signup": "http://127.0.0.1:8000/accounts/signup/",
+# "account_confirm_email": "http://127.0.0.1:8000/_allauth/app/v1/auth/email/verify/{key}/",
+# "account_reset_password": "http://127.0.0.1:8000/accounts/password/reset/",
+# "account_reset_password_from_key": "http://127.0.0.1:8000/accounts/password/reset/confirm/{key}/",
+# "account_signup": "http://127.0.0.1:8000/accounts/signup/",
 # }
 
 # Use True if your application fully takes care of the frontend, and you don't
@@ -110,47 +96,37 @@ REST_FRAMEWORK = {
 HEADLESS_ONLY = True
 
 MIDDLEWARE = [
-    'request_logging.middleware.LoggingMiddleware',
-
-    'django.middleware.security.SecurityMiddleware',
-    
+    "request_logging.middleware.LoggingMiddleware",
+    "django.middleware.security.SecurityMiddleware",
     # Manages sessions across requests.
-    'django.contrib.sessions.middleware.SessionMiddleware',
-
-    'django.middleware.common.CommonMiddleware',
-
-    'django.middleware.csrf.CsrfViewMiddleware',
-    
-    # Associates users with requests using sessions.
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-
-    'django.contrib.messages.middleware.MessageMiddleware',
-
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
-    'allauth.account.middleware.AccountMiddleware',
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    # Associates users with requests using sessions.
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
-ROOT_URLCONF = 'sweasy.urls'
+ROOT_URLCONF = "sweasy.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            # A list of callables that take a request object as their argument 
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            # A list of callables that take a request object as their argument
             # and return a dictionary of items to be merged into the context.
             # Note: Each context processor is applied in order.
-            'context_processors': [
+            "context_processors": [
                 # This allows RequestContext to contain "request".
                 # Note: This is required by 'allauth'.
-                'django.template.context_processors.request',
-                
+                "django.template.context_processors.request",
                 # This allows RequestContext to contain "user", "perms".
-                'django.contrib.auth.context_processors.auth',
-                
-                # This allows RequestContext to contain "messages" and 
+                "django.contrib.auth.context_processors.auth",
+                # This allows RequestContext to contain "messages" and
                 # "DEFAULT_MESSAGE_LEVELS".
                 # 'django.contrib.messages.context_processors.messages',
             ],
@@ -158,25 +134,24 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'sweasy.wsgi.application'
+WSGI_APPLICATION = "sweasy.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
-    # 'django.contrib.auth.backends.ModelBackend',
-
+    # 'django.contrib.auth.backends.ModelBackend',
     # `allauth` specific authentication methods, such as login by email
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 
@@ -185,16 +160,16 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -202,9 +177,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -214,10 +189,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'accounts.User'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+AUTH_USER_MODEL = "accounts.User"

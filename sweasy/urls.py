@@ -3,41 +3,46 @@ from django.urls import path, include, re_path
 from django.shortcuts import redirect
 from dj_rest_auth.registration.views import (
     ResendEmailVerificationView,
-    VerifyEmailView, 
+    VerifyEmailView,
 )
 from accounts.views import CustomRegisterView
+
 
 def confirm_email_redirect(request, key):
     return redirect(f"http://localhost:3000/confirm-email?key={key}")
 
+
+BASE_API_PATH = "api/v1"
+
 urlpatterns = [
-    path('api/v1/auth/', include('dj_rest_auth.urls')),
+    path(f"{BASE_API_PATH}/auth/", include("dj_rest_auth.urls")),
     path(
-        'api/v1/auth/account-confirm-email/',
+        f"{BASE_API_PATH}/auth/account-confirm-email/",
         VerifyEmailView.as_view(),
-        name='account_email_verification_sent'
+        name="account_email_verification_sent",
     ),
     path(
-        'api/v1/auth/registration/',
+        f"{BASE_API_PATH}/auth/registration/",
         CustomRegisterView.as_view(),
-        name='rest_register'
+        name="rest_register",
     ),
     path(
-        'api/v1/auth/registration/verify-email/',
+        f"{BASE_API_PATH}/auth/registration/verify-email/",
         VerifyEmailView.as_view(),
-        name='rest_verify_email'
+        name="rest_verify_email",
     ),
     path(
-        'api/v1/auth/registration/resend-email/',
+        f"{BASE_API_PATH}/auth/registration/resend-email/",
         ResendEmailVerificationView.as_view(),
-        name='rest_resend_email'
+        name="rest_resend_email",
     ),
     re_path(
-        r"^api/v1/auth/registration/account-confirm-email/(?P<key>[-:\w]+)/$",
+        r"^"
+        + f"{BASE_API_PATH}/auth/registration/account-confirm-email/(?P<key>[-:\w]+)/$",
         confirm_email_redirect,
-        name="account_confirm_email"
+        name="account_confirm_email",
     ),
-    path('api/v1/accounts/', include('accounts.urls')),
+    path(f"{BASE_API_PATH}/accounts/", include("accounts.urls")),
     # path('api/v1/admin/', admin.site.urls),
-    path('api/v1/catalog/', include('catalog.urls')),
+    path(f"{BASE_API_PATH}/catalog/", include("catalog.urls")),
 ]
