@@ -21,93 +21,28 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
 # Application definition
 
 INSTALLED_APPS = [
-    # Collection of custom extensions for the Django Framework (management
-    # commands, additional database fields, admin extensions and much more).
     "django_extensions",
     "rest_framework",
-    # 'rest_framework.authtoken',
-    # Basic auth functionality like login, logout, password reset and password change.
-    # Wraps allatuh and django auth.
-    "dj_rest_auth",
-    "django.contrib.sites",
-    # allauth and allauth.account in this project are needed as a backend
-    # engine for dj_rest_auth.registration.
-    "allauth",
-    "allauth.account",
-    # Logic related with registration and social media authentication.
-    # Uses allauth under the hood.
-    "dj_rest_auth.registration",
-    "allauth.socialaccount",
-    "catalog",
-    "accounts",
-    # 'django.contrib.admin',
-    # Authentication framework and its default models.
-    # - Four default permissions are created for each model (add, change, delete, view)
-    # Note: This is required for 'allauth'.
+    "rest_framework_simplejwt",
     "django.contrib.auth",
-    # Allows permissions to be associated with models.
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    # Note: This is required for 'allauth'.
-    "django.contrib.messages",
     "django.contrib.staticfiles",
+    "accounts",
+    "catalog",
 ]
-
-SITE_ID = 1
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*", "username*"]
-ACCOUNT_LOGIN_METHODS = {"email", "username"}
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-EMAIL_REQUIRED = True
-
-
-REST_AUTH = {
-    "USE_JWT": True,
-    "JWT_AUTH_COOKIE": "sweasy-jwt",
-    "JWT_AUTH_REFRESH_COOKIE": "sweasy-refresh-jwt",
-    "TOKEN_MODEL": None,  # Leave None if not importing rest_framework.authtoken
-    "SESSION_LOGIN": False,
-    # 'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
-    # 'LOGIN_SERIALIZER': 'accounts.serializers.CustomLoginSerializer',
-}
-
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
-    ),
-}
-
-# In case you need to point these to your own frontend application, you can do
-# so by configuring this setting.
-# HEADLESS_FRONTEND_URLS = {
-# "account_confirm_email": "http://127.0.0.1:8000/_allauth/app/v1/auth/email/verify/{key}/",
-# "account_reset_password": "http://127.0.0.1:8000/accounts/password/reset/",
-# "account_reset_password_from_key": "http://127.0.0.1:8000/accounts/password/reset/confirm/{key}/",
-# "account_signup": "http://127.0.0.1:8000/accounts/signup/",
-# }
-
-# Use True if your application fully takes care of the frontend, and you don't
-# want for e.g. the login and signup views to be accessible.
-# In this case, including allauth.urls skips those views, yet, still includes
-# e.g. the provider callback views.
-HEADLESS_ONLY = True
 
 MIDDLEWARE = [
     "request_logging.middleware.LoggingMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    # Manages sessions across requests.
-    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    # Associates users with requests using sessions.
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "allauth.account.middleware.AccountMiddleware",
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
 
 ROOT_URLCONF = "sweasy.urls"
 
@@ -122,7 +57,6 @@ TEMPLATES = [
             # Note: Each context processor is applied in order.
             "context_processors": [
                 # This allows RequestContext to contain "request".
-                # Note: This is required by 'allauth'.
                 "django.template.context_processors.request",
                 # This allows RequestContext to contain "user", "perms".
                 "django.contrib.auth.context_processors.auth",
@@ -146,13 +80,6 @@ DATABASES = {
         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
-
-AUTHENTICATION_BACKENDS = [
-    # Needed to login by username in Django admin, regardless of `allauth`
-    # 'django.contrib.auth.backends.ModelBackend',
-    # `allauth` specific authentication methods, such as login by email
-    "allauth.account.auth_backends.AuthenticationBackend",
-]
 
 
 # Password validation
