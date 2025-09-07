@@ -46,6 +46,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=validated_data["username"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
+            is_active=False,
+            email_verified_at=None,
         )
         return user
 
@@ -68,8 +70,8 @@ class LoginSerializer(TokenObtainPairSerializer):
             raise serializers.ValidationError("Invalid credentials")
 
         # Optional gate: require verified email if you track it
-        # if hasattr(user, "email_verified") and not user.email_verified:
-        #     raise serializers.ValidationError("Email not verified")
+        if not user.email_verified_at:
+            raise serializers.ValidationError("Email not verified")
 
         # Hand off to parent with the real username, as expected by the base class
         data = super().validate(
