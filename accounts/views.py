@@ -1,5 +1,6 @@
-from django.utils import timezone
 import jwt
+from django.utils import timezone
+from django.conf import settings
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.views import Response, status
@@ -24,14 +25,13 @@ class RegisterView(generics.CreateAPIView):
         send_mail(
             "Subject here",
             "Here is the token: " + token,
-            "from@sweasy.com",
+            settings.DEFAULT_FROM_EMAIL,
             [serializer.validated_data["email"]],
             fail_silently=False,
         )
 
 
 class VerifyEmailView(generics.GenericAPIView):
-    
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -50,7 +50,7 @@ class VerifyEmailView(generics.GenericAPIView):
                 {"error": "Invalid or expired token"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-            
+
         try:
             user = User.objects.get(id=claims["sub"])
         except User.DoesNotExist:
@@ -58,17 +58,17 @@ class VerifyEmailView(generics.GenericAPIView):
                 {"error": "User not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-            
+
         if not user.email_verified_at:
             user.email_verified_at = timezone.now()
             user.is_active = True
             user.save(update_fields=["email_verified_at", "is_active"])
-            
+
             return Response(
                 {"message": "Email verified"},
                 status=status.HTTP_200_OK,
             )
-            
+
         return Response(
             {"message": "Email already verified"},
             status=status.HTTP_200_OK,
