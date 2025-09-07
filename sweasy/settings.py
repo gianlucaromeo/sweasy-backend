@@ -44,6 +44,10 @@ REST_FRAMEWORK = {
     ),
 }
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_VERIFY_TTL_SECONDS = os.getenv("EMAIL_VERIFY_TTL_SECONDS")
+EMAIL_VERIFY_ALG = os.getenv("EMAIL_VERIFY_ALG")
+
 ROOT_URLCONF = "sweasy.urls"
 
 TEMPLATES = [
