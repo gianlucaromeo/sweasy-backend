@@ -1,7 +1,7 @@
 from django.contrib.auth import password_validation
 from rest_framework import serializers
 from .models import User
-from django.db.models import Q
+from django.db.models import Q, EmailField
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
@@ -38,6 +38,22 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Passwords do not match.")
         password_validation.validate_password(password1)
         return attrs
+    
+    def validate_email(self, value):
+        validated = value.strip()
+        if validated is None:
+            raise serializers.ValidationError("Email is required.")
+        if User.objects.filter(email=validated).exists():
+            raise serializers.ValidationError("Email already exists.")
+        return validated
+    
+    def validate_username(self, value):
+        validated = value.strip()
+        if validated is None:
+            raise serializers.ValidationError("Username is required.")
+        if User.objects.filter(username=validated).exists():
+            raise serializers.ValidationError("Username already exists.")
+        return validated
 
     def create(self, validated_data):
         user = User.objects.create_user(
