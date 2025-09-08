@@ -34,19 +34,9 @@ class RegisterView(generics.CreateAPIView):
                 return True
         return False
 
-    def __required_details_400(self, detail, code):
-        """
-        Return a 400 BAD REQUEST response with the detail and code.
-
-        Example:
-
-        {
-            "detail": "Email is required",
-            "code": "email-required",
-        }
-        """
+    def __code_400(self, code):
         return Response(
-            {"detail": detail, "code": code},
+            {"code": code},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -67,37 +57,21 @@ class RegisterView(generics.CreateAPIView):
         err: serializers.ValidationError,
     ) -> Response:
         detail = err.detail if isinstance(err.detail, dict) else {}
-
-        # EMAIL is missing
-        if self.__is_missing_required("email", detail):
-            return self.__required_details_400("email", CODE_EMAIL_REQUIRED)
-
-        # USERNAME is missing
-        if self.__is_missing_required("username", detail):
-            return self.__required_details_400(
-                "username",
-                CODE_USERNAME_REQUIRED,
-            )
-        # PASSWORD1 is missing
-        if self.__is_missing_required("password1", detail):
-            return self.__required_details_400(
-                "password1",
-                CODE_PASSWORD1_REQUIRED,
-            )
-
-        # PASSWORD2 is missing
-        if self.__is_missing_required("password2", detail):
-            return self.__required_details_400(
-                "password2",
-                CODE_PASSWORD2_REQUIRED,
-            )
+        
+        required_fields = [
+            {"field": "username", "code": CODE_USERNAME_REQUIRED},
+            {"field": "email", "code": CODE_EMAIL_REQUIRED},
+            {"field": "password1", "code": CODE_PASSWORD1_REQUIRED},
+            {"field": "password2", "code": CODE_PASSWORD2_REQUIRED},
+        ]
+        
+        for field in required_fields:
+            if self.__is_missing_required(field["field"], detail):
+                return self.__code_400(field["code"])
 
         # USERNAME is not unique
         if self.__is_not_unique("username", detail):
-            return self.__required_details_400(
-                "username",
-                CODE_USERNAME_UNIQUE,
-            )
+            return self.__code_400(CODE_USERNAME_UNIQUE)
 
         # EMAIL is not unique
         if self.__is_not_unique("email", detail):
@@ -142,7 +116,7 @@ class VerifyEmailView(generics.GenericAPIView):
 
         if not token:
             return Response(
-                {"error": "Token is required"},
+                {"code": CODE_TOKEN_REQUIRED},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -150,7 +124,7 @@ class VerifyEmailView(generics.GenericAPIView):
             claims = decode_and_validate_email_verification_token(token)
         except jwt.InvalidTokenError:
             return Response(
-                {"error": "Invalid or expired token"},
+                {"code": CODE_INVALID_OR_EXPIRED_TOKEN},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -158,7 +132,7 @@ class VerifyEmailView(generics.GenericAPIView):
             user = User.objects.get(id=claims["sub"])
         except User.DoesNotExist:
             return Response(
-                {"error": "User not found"},
+                {"code": CODE_USER_NOT_FOUND},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -168,12 +142,12 @@ class VerifyEmailView(generics.GenericAPIView):
             user.save(update_fields=["email_verified_at", "is_active"])
 
             return Response(
-                {"message": "Email verified"},
+                {"detail": MSG_EMAIL_VERIFIED},
                 status=status.HTTP_200_OK,
             )
 
         return Response(
-            {"message": "Email already verified"},
+            {"detail": MSG_EMAIL_ALREADY_VERIFIED},
             status=status.HTTP_200_OK,
         )
 
@@ -186,7 +160,7 @@ class ResendEmailVerificationView(generics.GenericAPIView):
         email = request.data.get("email")
         if not email:
             return Response(
-                {"error": "Email is required"},
+                {"code": CODE_EMAIL_REQUIRED},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

@@ -20,3 +20,16 @@ CODE_USERNAME_UNIQUE = "username-unique"
 GENERIC_REGISTRATION_MSG = "If this account was not registered before, a confirmation email will be sent to the provided e-mail."
 GENERIC_REGISTRATION_ERR_MSG = "Error creating user."
 DESTROY_ME_MSG = "We succesfully stored your request of account deletion and will process it soon."
+
+# TOKENS - CODES
+CODE_TOKEN_REQUIRED = "token-required"
+CODE_INVALID_OR_EXPIRED_TOKEN = "invalid-or-expired-token"
+
+# OTHER - CODES
+CODE_USER_NOT_FOUND = "user-not-found"
+CODE_EMAIL_REQUIRED = "email-required"
+
+# OTHER - MESSAGES
+MSG_EMAIL_VERIFIED = "Email verified"
+MSG_EMAIL_ALREADY_VERIFIED = "Email already verified"
+
