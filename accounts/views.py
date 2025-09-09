@@ -15,7 +15,6 @@ from .utils import (
     decode_and_validate_email_verification_token,
     generate_email_verification_token,
 )
-from rest_framework.throttling import AnonRateThrottle
 
 
 class RegisterView(generics.CreateAPIView):
@@ -57,14 +56,14 @@ class RegisterView(generics.CreateAPIView):
         err: serializers.ValidationError,
     ) -> Response:
         detail = err.detail if isinstance(err.detail, dict) else {}
-        
+
         required_fields = [
             {"field": "username", "code": CODE_USERNAME_REQUIRED},
             {"field": "email", "code": CODE_EMAIL_REQUIRED},
             {"field": "password1", "code": CODE_PASSWORD1_REQUIRED},
             {"field": "password2", "code": CODE_PASSWORD2_REQUIRED},
         ]
-        
+
         for field in required_fields:
             if self.__is_missing_required(field["field"], detail):
                 return self.__code_400(field["code"])
@@ -150,19 +149,6 @@ class VerifyEmailView(generics.GenericAPIView):
             {"detail": MSG_EMAIL_ALREADY_VERIFIED},
             status=status.HTTP_200_OK,
         )
-
-
-class ResendEmailVerificationView(generics.GenericAPIView):
-    permission_classes = [AllowAny]
-    throttle_classes = [AnonRateThrottle]
-
-    def post(self, request):
-        email = request.data.get("email")
-        if not email:
-            return Response(
-                {"code": CODE_EMAIL_REQUIRED},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
 
 
 class LoginView(TokenObtainPairView):
