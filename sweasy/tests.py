@@ -88,6 +88,13 @@ class RegistrationTests(APITestCase):
         res = self.register(data)
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        
+    def test_register__passwords_must_match(self):
+        data = dict(self.payload, password2="different-password")
+        res = self.register(data)
+        self.assertEqual(User.objects.count(), 0)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(res.data["code"], CODE_PASSWORDS_DO_NOT_MATCH)
 
 
 @override_settings(ACCOUNT_EMAIL_VERIFICATION="mandatory")

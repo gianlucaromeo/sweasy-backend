@@ -76,6 +76,12 @@ class RegisterView(generics.CreateAPIView):
         if self.__is_not_unique("email", detail):
             return self.__created_details_201(GENERIC_REGISTRATION_MSG)
 
+        if "non_field_errors" in detail:
+            for error in detail["non_field_errors"]:
+                # Passwords do not match
+                if CODE_PASSWORDS_DO_NOT_MATCH in error.code:
+                    return self.__code_400(CODE_PASSWORDS_DO_NOT_MATCH)
+
         # Other
         print("Unhandled validation error:", str(err))
         return self.__unhandled_exception_details_400(GENERIC_REGISTRATION_ERR_MSG)
@@ -99,6 +105,8 @@ class RegisterView(generics.CreateAPIView):
         try:
             return super().create(request, *args, **kwargs)
         except IntegrityError as e:
+            # Should be when unique constraint is violated
+            print("Integrity error:", str(e))
             return self.__handle_integrity_error(e)
         except serializers.ValidationError as e:
             return self.__handle_validation_error(e)

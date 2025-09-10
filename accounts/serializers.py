@@ -3,6 +3,12 @@ from rest_framework import serializers
 from .models import User
 from django.db.models import Q, EmailField
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from accounts.constants import (
+    CODE_PASSWORDS_DO_NOT_MATCH,
+    CODE_EMAIL_UNIQUE,
+    ERR_EMAIL_UNIQUE,
+    ERR_PASSWORDS_DO_NOT_MATCH,
+)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -30,30 +36,33 @@ class RegisterSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
         ]
+        extra_kwargs = {
+            "email": {
+                # Override to [], otherwise it will use UniqueValidator by 
+                # default and will be called before validate_email
+                "validators": [],
+            },
+        }
 
     def validate(self, attrs):
         password1 = attrs.get("password1")
         password2 = attrs.get("password2")
         if password1 != password2:
-            raise serializers.ValidationError("Passwords do not match.")
+            raise serializers.ValidationError(
+                ERR_PASSWORDS_DO_NOT_MATCH,
+                code=CODE_PASSWORDS_DO_NOT_MATCH,
+            )
         password_validation.validate_password(password1)
         return attrs
-    
+
+    # Custom validator for email to add a code
     def validate_email(self, value):
-        validated = value.strip()
-        if validated is None:
-            raise serializers.ValidationError("Email is required.")
-        if User.objects.filter(email=validated).exists():
-            raise serializers.ValidationError("Email already exists.")
-        return validated
-    
-    def validate_username(self, value):
-        validated = value.strip()
-        if validated is None:
-            raise serializers.ValidationError("Username is required.")
-        if User.objects.filter(username=validated).exists():
-            raise serializers.ValidationError("Username already exists.")
-        return validated
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError(
+                ERR_EMAIL_UNIQUE,
+                code=CODE_EMAIL_UNIQUE,
+            )
+        return value
 
     def create(self, validated_data):
         user = User.objects.create_user(

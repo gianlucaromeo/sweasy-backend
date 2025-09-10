@@ -12,9 +12,11 @@ CODE_PASSWORD2_REQUIRED = "password2-required"
 
 # UNIQUE FIELDS - MESSAGES
 ERR_USERNAME_UNIQUE = "Username already exists"
+ERR_EMAIL_UNIQUE = "Email already exists"
 
 # UNIQUE FIELDS - CODES
 CODE_USERNAME_UNIQUE = "username-unique"
+CODE_EMAIL_UNIQUE = "email-unique"
 
 # GENERIC MESSAGES
 GENERIC_REGISTRATION_MSG = "If this account was not registered before, a confirmation email will be sent to the provided e-mail."
@@ -28,8 +30,10 @@ CODE_INVALID_OR_EXPIRED_TOKEN = "invalid-or-expired-token"
 # OTHER - CODES
 CODE_USER_NOT_FOUND = "user-not-found"
 CODE_EMAIL_REQUIRED = "email-required"
+CODE_PASSWORDS_DO_NOT_MATCH = "passwords-do-not-match"
 
 # OTHER - MESSAGES
 MSG_EMAIL_VERIFIED = "Email verified"
 MSG_EMAIL_ALREADY_VERIFIED = "Email already verified"
+ERR_PASSWORDS_DO_NOT_MATCH = "Passwords do not match"
 
