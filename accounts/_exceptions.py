@@ -24,8 +24,8 @@ def registration_exception_handler(exc, ctx):
     def is_required(e):
         return getattr(e, "code", "") == "required"
 
-    def is_unique(e, unique_code="unique"):
-        return getattr(e, "code", "") == unique_code
+    def is_unique(e, attr_name="unique"):
+        return getattr(e, "code", "") == attr_name
 
     required_fields = {
         "username": CODE_USERNAME_REQUIRED,
