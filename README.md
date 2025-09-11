@@ -42,6 +42,12 @@ Apply migrations:
 python manage.py migrate
 ```
 
+Copy .env.example into .env
+```
+cp .env.example .env
+```
+(You can edit the .env file as needed.)
+
 Start the server:
 ```
 python manage.py runserver
