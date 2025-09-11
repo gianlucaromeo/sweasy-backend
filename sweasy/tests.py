@@ -5,14 +5,12 @@ from django.test import override_settings
 from rest_framework import status
 from rest_framework.test import APITestCase
 from accounts.models import User
-from catalog.models import Book, Category, Chapter
 from accounts.constants import *
 
 
-@override_settings(ACCOUNT_EMAIL_VERIFICATION="mandatory")
 class RegistrationTests(APITestCase):
     REGISTER_URL = reverse("register")
-
+    
     @classmethod
     def setUpTestData(cls):
         cls.username = "john-doe"
@@ -97,7 +95,6 @@ class RegistrationTests(APITestCase):
         self.assertEqual(res.data["code"], CODE_PASSWORDS_DO_NOT_MATCH)
 
 
-@override_settings(ACCOUNT_EMAIL_VERIFICATION="mandatory")
 class LoginTests(APITestCase):
     REGISTER_URL = reverse("register")
     LOGIN_URL = reverse("login")
