@@ -38,13 +38,15 @@ def registration_exception_handler(exc, ctx):
         if any(is_required(e) for e in data.get(field, [])):
             return Response({"code": code}, status=status.HTTP_400_BAD_REQUEST)
 
+    # Username unique returns 400
     if any(is_unique(e) for e in data.get("username", [])):
         return Response(
             {"code": CODE_USERNAME_UNIQUE},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    if any(is_unique(e, "email-unique") for e in data.get("email", [])):
+    # Email unique returns 201 to avoid enumeration
+    if any(is_unique(e) for e in data.get("email", [])):
         return Response(
             {"code": CODE_EMAIL_UNIQUE},
             status=status.HTTP_201_CREATED,

@@ -26,12 +26,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
         ]
-        extra_kwargs = {
-            "email": {
-                # Disable default UniqueValidator to control error codes yourself
-                "validators": [],
-            },
-        }
 
     def validate(self, attrs):
         password1 = attrs.get("password1")
@@ -43,15 +37,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             )
         password_validation.validate_password(password1)
         return attrs
-
-    # Custom validator for email to add a code
-    def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError(
-                ERR_EMAIL_UNIQUE,
-                code=CODE_EMAIL_UNIQUE,
-            )
-        return value
 
     @transaction.atomic
     def create(self, validated_data):
