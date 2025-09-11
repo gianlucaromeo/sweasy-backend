@@ -6,8 +6,6 @@ from django.db.models import Q
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from accounts.constants import (
     CODE_PASSWORDS_DO_NOT_MATCH,
-    CODE_EMAIL_UNIQUE,
-    ERR_EMAIL_UNIQUE,
     ERR_PASSWORDS_DO_NOT_MATCH,
 )
 
