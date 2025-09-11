@@ -12,17 +12,6 @@ from accounts.constants import (
 )
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "email", "password", "username"]
-        extra_kwargs = {"password": {"write_only": True}}
-
-    def create(self, validated_data):
-        user = User.objects.create(**validated_data)
-        return user
-
-
 class RegisterSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True, trim_whitespace=False)
     password2 = serializers.CharField(write_only=True, trim_whitespace=False)
