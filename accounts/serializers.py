@@ -1,7 +1,8 @@
 from django.contrib.auth import password_validation
+from django.db import transaction
 from rest_framework import serializers
 from .models import User
-from django.db.models import Q, EmailField
+from django.db.models import Q
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from accounts.constants import (
     CODE_PASSWORDS_DO_NOT_MATCH,
@@ -38,8 +39,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         ]
         extra_kwargs = {
             "email": {
-                # Override to [], otherwise it will use UniqueValidator by 
-                # default and will be called before validate_email
+                # Disable default UniqueValidator to control error codes yourself
                 "validators": [],
             },
         }
@@ -64,10 +64,13 @@ class RegisterSerializer(serializers.ModelSerializer):
             )
         return value
 
+    @transaction.atomic
     def create(self, validated_data):
+        password = validated_data.pop("password1")
+        validated_data.pop("password2")
         user = User.objects.create_user(
             email=validated_data["email"],
-            password=validated_data["password1"],
+            password=password,
             username=validated_data["username"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
