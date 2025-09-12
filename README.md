@@ -1,5 +1,3 @@
-Here’s a corrected and cleaned up version:
-
 # SWeasy Backend
 
 Django REST Framework backend for SWeasy.
